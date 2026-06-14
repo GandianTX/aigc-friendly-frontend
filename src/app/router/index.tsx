@@ -10,6 +10,10 @@ import {
 
 import { AppLayout } from '@/app/layout';
 
+import { BlogArticlePage } from '@/pages/blog-article';
+import { BlogArchivePage } from '@/pages/blog-archive';
+import { BlogHomePage } from '@/pages/blog-home';
+import { BlogSearchPage } from '@/pages/blog-search';
 import { ErrorPreviewPage } from '@/pages/error-preview';
 import { HomePage } from '@/pages/home';
 import { ProjectStructurePage } from '@/pages/project-structure';
@@ -74,6 +78,26 @@ const router = createBrowserRouter([
       {
         element: <ProjectStructurePage />,
         path: 'project-structure',
+      },
+      {
+        element: <BlogHomePage />,
+        path: 'blog',
+      },
+      {
+        element: <BlogArticlePage />,
+        path: 'blog/article/:id',
+      },
+      {
+        element: <BlogSearchPage />,
+        path: 'blog/search',
+      },
+      {
+        element: <BlogArchivePage />,
+        path: 'blog/archive',
+      },
+      {
+        element: <BlogArchivePage />,
+        path: 'blog/archive/:year/:month',
       },
       {
         element: <ErrorPreviewPage />,
