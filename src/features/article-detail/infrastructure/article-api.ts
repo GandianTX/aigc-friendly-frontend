@@ -1,15 +1,8 @@
-// src/entities/article/infrastructure/article-api.ts
+// src/features/article-detail/infrastructure/article-api.ts
 
 import { executeGraphQL } from '@/shared/graphql';
 
-import type { ArticleDTO, ArticlesPageDTO, PrevNextArticleDTO } from './dto';
-
-type PublishedArticlesVariables = {
-  page: number;
-  pageSize: number;
-  categoryId: string | null;
-  tagId: string | null;
-};
+import type { ArticleDTO, PrevNextArticleDTO } from './dto';
 
 type ArticleByIdVariables = {
   id: string;
@@ -22,20 +15,6 @@ type PrevNextArticleVariables = {
 type IncrementViewCountVariables = {
   id: string;
 };
-
-const PUBLISHED_ARTICLES_QUERY = `
-  query PublishedArticles($page: Int!, $pageSize: Int!, $categoryId: String, $tagId: String) {
-    publishedArticles(page: $page, pageSize: $pageSize, categoryId: $categoryId, tagId: $tagId) {
-      items {
-        id title summary coverImageUrl status isTop publishedAt
-        viewCount likeCount commentCount categoryId categoryName
-        tags { id name slug }
-        createdAt updatedAt
-      }
-      total page pageSize
-    }
-  }
-`;
 
 const ARTICLE_BY_ID_QUERY = `
   query ArticleById($id: String!) {
@@ -62,26 +41,6 @@ const INCREMENT_VIEW_COUNT_MUTATION = `
     incrementViewCount(id: $id)
   }
 `;
-
-export async function fetchPublishedArticles(params: {
-  page: number;
-  pageSize: number;
-  categoryId?: string;
-  tagId?: string;
-}): Promise<ArticlesPageDTO> {
-  const data = await executeGraphQL<{ publishedArticles: ArticlesPageDTO }, PublishedArticlesVariables>(
-    PUBLISHED_ARTICLES_QUERY,
-    {
-      page: params.page,
-      pageSize: params.pageSize,
-      categoryId: params.categoryId ?? null,
-      tagId: params.tagId ?? null,
-    },
-    { authMode: 'none' },
-  );
-
-  return data.publishedArticles;
-}
 
 export async function fetchArticleById(id: string): Promise<ArticleDTO | null> {
   const data = await executeGraphQL<{ articleById: ArticleDTO | null }, ArticleByIdVariables>(

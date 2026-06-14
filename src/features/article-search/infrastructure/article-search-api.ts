@@ -2,7 +2,7 @@
 
 import { executeGraphQL, PAGINATION_MODE } from '@/shared/graphql';
 
-import type { ArticlesPageDTO } from '@/entities/article';
+import type { ArticlesPageDTO } from './dto';
 
 type SearchArticlesVariables = {
   keyword: string;
@@ -14,7 +14,7 @@ type SearchArticlesVariables = {
 };
 
 const SEARCH_ARTICLES_QUERY = `
-  query SearchArticles($keyword: String!, $pagination: PaginationInput!) {
+  query SearchArticles($keyword: String!, $pagination: PaginationArgs!) {
     searchArticles(keyword: $keyword, pagination: $pagination) {
       items {
         id title summary coverImageUrl status isTop publishedAt

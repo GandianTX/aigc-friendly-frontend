@@ -2,11 +2,9 @@
 
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
-import {
-  type ArticleListItem,
-  mapArticlesPageDTO,
-} from '@/entities/article';
+import { type ArticleListItem } from '@/entities/article';
 import { fetchArticlesByArchive } from '../infrastructure/article-archive-api';
+import { mapArticlesPageDTO } from '../infrastructure/mapper';
 import {
   createPaginatedListReducer,
   createInitialPaginatedListState,

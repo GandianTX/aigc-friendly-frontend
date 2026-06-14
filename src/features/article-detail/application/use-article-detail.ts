@@ -2,14 +2,9 @@
 
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
-import {
-  type Article,
-  fetchArticleById,
-  fetchPrevNextArticle,
-  incrementViewCount,
-  mapArticleDTOToArticle,
-  mapPrevNextArticleDTO,
-} from '@/entities/article';
+import { type Article } from '@/entities/article';
+import { fetchArticleById, fetchPrevNextArticle, incrementViewCount } from '../infrastructure/article-api';
+import { mapArticleDTOToArticle, mapPrevNextArticleDTO } from '../infrastructure/mapper';
 
 type ArticleDetailState = {
   article: Article | null;
@@ -64,10 +59,7 @@ export function useArticleDetail(articleId: string | undefined) {
     const requestId = ++requestIdRef.current;
     dispatch({ type: 'FETCH_START' });
     try {
-      const [articleDTO, prevNextDTO] = await Promise.all([
-        fetchArticleById(articleId),
-        fetchPrevNextArticle(articleId),
-      ]);
+      const articleDTO = await fetchArticleById(articleId);
 
       if (requestId !== requestIdRef.current) return;
 
@@ -77,7 +69,21 @@ export function useArticleDetail(articleId: string | undefined) {
       }
 
       const article = mapArticleDTOToArticle(articleDTO);
-      const { prev, next } = mapPrevNextArticleDTO(prevNextDTO);
+
+      let prev: Article | null = null;
+      let next: Article | null = null;
+      try {
+        const prevNextDTO = await fetchPrevNextArticle(articleId);
+        if (requestId !== requestIdRef.current) return;
+        const mapped = mapPrevNextArticleDTO(prevNextDTO);
+        prev = mapped.prev;
+        next = mapped.next;
+      } catch (err) {
+        // prevNextArticle 查询失败不阻塞主内容显示，但记录日志便于排查
+        if (import.meta.env.DEV) {
+          console.warn('[useArticleDetail] prevNextArticle failed:', err);
+        }
+      }
 
       dispatch({ type: 'FETCH_SUCCESS', article, prev, next });
 

@@ -2,9 +2,7 @@
 
 import { executeGraphQL } from '@/shared/graphql';
 
-import type { ArticlesPageDTO } from '@/entities/article';
-
-import type { ArchiveDTO } from './dto';
+import type { ArticlesPageDTO, ArchiveDTO } from './dto';
 
 export type { ArchiveDTO } from './dto';
 
@@ -34,7 +32,7 @@ type ArticlesByArchiveVariables = {
 };
 
 const ARTICLES_BY_ARCHIVE_QUERY = `
-  query ArticlesByArchive($year: Int!, $month: Int!, $page: Int!, $pageSize: Int!) {
+  query ArticlesByArchive($year: Int!, $month: Int!, $page: Int, $pageSize: Int) {
     articlesByArchive(year: $year, month: $month, page: $page, pageSize: $pageSize) {
       items {
         id title summary coverImageUrl status isTop publishedAt

@@ -1,10 +1,4 @@
-// src/features/article-archive/infrastructure/dto.ts
-
-export interface ArchiveDTO {
-  readonly year: number;
-  readonly month: number;
-  readonly count: number;
-}
+// src/features/article-search/infrastructure/dto.ts
 
 export interface ArticleDTO {
   readonly id: string;

@@ -20,7 +20,7 @@ function highlightText(text: string, keyword: string): React.ReactNode {
   if (parts.length <= 1) return text;
   return parts.map((part, i) =>
     part.toLowerCase() === keyword.toLowerCase() ? (
-      <mark key={i} style={{ backgroundColor: '#ffe58f', padding: 0 }}>{part}</mark>
+      <mark key={i} style={{ backgroundColor: 'var(--color-highlight-match, #ffe58f)', padding: 0 }}>{part}</mark>
     ) : (
       part
     ),

@@ -2,7 +2,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import type { ArticlesPageDTO } from '@/entities/article';
+import type { ArticlesPageDTO } from './dto';
 
 // Mock executeGraphQL before importing the module under test
 const mockExecuteGraphQL = vi.fn();
@@ -24,6 +24,7 @@ describe('article-search-api', () => {
         {
           id: 'a1',
           title: 'NestJS 入门',
+          content: '正文内容',
           summary: '摘要',
           coverImageUrl: null,
           status: 'PUBLISHED',

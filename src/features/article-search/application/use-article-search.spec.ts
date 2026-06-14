@@ -3,16 +3,23 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-import * as articleApi from '@/entities/article/infrastructure/article-api';
-import * as articleMapper from '@/entities/article/infrastructure/mapper';
+import { mapArticlesPageDTO } from '../infrastructure/mapper';
 
+import { searchArticles } from '../infrastructure/article-search-api';
 import { useArticleSearch } from './use-article-search';
 
-vi.mock('@/entities/article/infrastructure/article-api');
-vi.mock('@/entities/article/infrastructure/mapper');
+// Mock feature-local API 和 mapper
+vi.mock('../infrastructure/article-search-api');
+vi.mock('../infrastructure/mapper', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../infrastructure/mapper')>();
+  return {
+    ...actual,
+    mapArticlesPageDTO: vi.fn(),
+  };
+});
 
-const mockSearchArticles = vi.mocked(articleApi.searchArticles);
-const mockMapArticlesPageDTO = vi.mocked(articleMapper.mapArticlesPageDTO);
+const mockSearchArticles = vi.mocked(searchArticles);
+const mockMapArticlesPageDTO = vi.mocked(mapArticlesPageDTO);
 
 const fakeMappedResult = {
   items: [
@@ -26,7 +33,7 @@ const fakeMappedResult = {
 describe('useArticleSearch', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockMapArticlesPageDTO.mockReturnValue(fakeMappedResult as ReturnType<typeof articleMapper.mapArticlesPageDTO>);
+    mockMapArticlesPageDTO.mockReturnValue(fakeMappedResult as ReturnType<typeof mapArticlesPageDTO>);
   });
 
   it('初始状态应该为空', () => {
@@ -39,7 +46,7 @@ describe('useArticleSearch', () => {
   });
 
   it('search 应该触发搜索并更新结果', async () => {
-    mockSearchArticles.mockResolvedValue({} as Awaited<ReturnType<typeof articleApi.searchArticles>>);
+    mockSearchArticles.mockResolvedValue({} as Awaited<ReturnType<typeof searchArticles>>);
 
     const { result } = renderHook(() => useArticleSearch());
 
@@ -93,7 +100,7 @@ describe('useArticleSearch', () => {
   });
 
   it('loadPage 应该加载指定页', async () => {
-    mockSearchArticles.mockResolvedValue({} as Awaited<ReturnType<typeof articleApi.searchArticles>>);
+    mockSearchArticles.mockResolvedValue({} as Awaited<ReturnType<typeof searchArticles>>);
 
     const { result } = renderHook(() => useArticleSearch());
 
@@ -103,7 +110,7 @@ describe('useArticleSearch', () => {
     });
 
     vi.clearAllMocks();
-    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, page: 2 } as ReturnType<typeof articleMapper.mapArticlesPageDTO>);
+    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, page: 2 } as ReturnType<typeof mapArticlesPageDTO>);
 
     await act(async () => {
       await result.current.loadPage(2);
@@ -126,14 +133,21 @@ describe('useArticleSearch', () => {
     expect(mockSearchArticles).not.toHaveBeenCalled();
   });
 
-  it('setKeyword 应该更新 keyword', () => {
+  it('search 应同时更新 keyword 和触发请求', async () => {
+    mockSearchArticles.mockResolvedValue({} as Awaited<ReturnType<typeof searchArticles>>);
+
     const { result } = renderHook(() => useArticleSearch());
 
-    act(() => {
-      result.current.setKeyword('React');
+    await act(async () => {
+      await result.current.search('React');
     });
 
     expect(result.current.keyword).toBe('React');
+    expect(mockSearchArticles).toHaveBeenCalledWith({
+      keyword: 'React',
+      page: 1,
+      pageSize: 10,
+    });
   });
 
   it('竞态保护：旧搜索完成应被忽略', async () => {
@@ -142,7 +156,7 @@ describe('useArticleSearch', () => {
 
     mockSearchArticles
       .mockImplementationOnce(() => firstPromise)
-      .mockResolvedValueOnce({} as Awaited<ReturnType<typeof articleApi.searchArticles>>);
+      .mockResolvedValueOnce({} as Awaited<ReturnType<typeof searchArticles>>);
 
     const { result } = renderHook(() => useArticleSearch());
 
@@ -157,7 +171,7 @@ describe('useArticleSearch', () => {
     });
 
     // 第一个请求完成，但应该被忽略
-    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, items: [{ id: 'old', title: '旧数据' }] } as ReturnType<typeof articleMapper.mapArticlesPageDTO>);
+    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, items: [{ id: 'old', title: '旧数据' }] } as ReturnType<typeof mapArticlesPageDTO>);
     await act(async () => {
       resolveFirst!({});
     });

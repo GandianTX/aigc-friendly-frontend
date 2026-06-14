@@ -1,4 +1,4 @@
-// src/entities/article/infrastructure/dto.ts
+// src/features/article-list/infrastructure/dto.ts
 
 export interface ArticleDTO {
   readonly id: string;
@@ -24,9 +24,4 @@ export interface ArticlesPageDTO {
   readonly total: number;
   readonly page: number;
   readonly pageSize: number;
-}
-
-export interface PrevNextArticleDTO {
-  readonly prev: ArticleDTO | null;
-  readonly next: ArticleDTO | null;
 }

@@ -2,9 +2,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import type { ArticlesPageDTO } from '@/entities/article';
-
-import type { ArchiveDTO } from './dto';
+import type { ArticlesPageDTO, ArchiveDTO } from './dto';
 
 // Mock executeGraphQL before importing the module under test
 const mockExecuteGraphQL = vi.fn();

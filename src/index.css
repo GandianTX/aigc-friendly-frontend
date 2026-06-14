@@ -63,6 +63,7 @@
   --error-block-shell-padding-inline: 24px;
   --error-block-shell-padding-block: 40px;
   --error-block-visual-min-height: 220px;
+  --color-highlight-match: #ffe58f;
   --error-block-icon-size: 11.25rem;
   --error-block-icon-opacity: 0.08;
   --error-block-status-font-size: clamp(6rem, 8vw, 8rem);
@@ -107,6 +108,7 @@
     var(--color-ai-accent) 58%,
     var(--ant-color-bg-layout)
   );
+  --color-highlight-match: #d4b106;
 }
 
 [data-layout-surface='sidecar'] {

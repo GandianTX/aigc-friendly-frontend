@@ -3,17 +3,23 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-import * as articleApi from '@/entities/article/infrastructure/article-api';
-import * as articleMapper from '@/entities/article/infrastructure/mapper';
+import { mapArticlesPageDTO } from '../infrastructure/mapper';
 
+import { fetchArticlesByArchive } from '../infrastructure/article-archive-api';
 import { useArchiveArticles } from './use-archive-articles';
 
-// Mock API 和 mapper
-vi.mock('@/entities/article/infrastructure/article-api');
-vi.mock('@/entities/article/infrastructure/mapper');
+// Mock feature-local API 和 mapper
+vi.mock('../infrastructure/article-archive-api');
+vi.mock('../infrastructure/mapper', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../infrastructure/mapper')>();
+  return {
+    ...actual,
+    mapArticlesPageDTO: vi.fn(),
+  };
+});
 
-const mockFetchArticlesByArchive = vi.mocked(articleApi.fetchArticlesByArchive);
-const mockMapArticlesPageDTO = vi.mocked(articleMapper.mapArticlesPageDTO);
+const mockFetchArticlesByArchive = vi.mocked(fetchArticlesByArchive);
+const mockMapArticlesPageDTO = vi.mocked(mapArticlesPageDTO);
 
 const fakeMappedResult = {
   items: [
@@ -28,11 +34,11 @@ const fakeMappedResult = {
 describe('useArchiveArticles', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockMapArticlesPageDTO.mockReturnValue(fakeMappedResult as ReturnType<typeof articleMapper.mapArticlesPageDTO>);
+    mockMapArticlesPageDTO.mockReturnValue(fakeMappedResult as ReturnType<typeof mapArticlesPageDTO>);
   });
 
   it('挂载时应该自动加载第一页数据', async () => {
-    mockFetchArticlesByArchive.mockResolvedValue({} as Awaited<ReturnType<typeof articleApi.fetchArticlesByArchive>>);
+    mockFetchArticlesByArchive.mockResolvedValue({} as Awaited<ReturnType<typeof fetchArticlesByArchive>>);
 
     const { result } = renderHook(() => useArchiveArticles(2024, 6));
 
@@ -75,7 +81,7 @@ describe('useArchiveArticles', () => {
   });
 
   it('loadPage 应该加载指定页', async () => {
-    mockFetchArticlesByArchive.mockResolvedValue({} as Awaited<ReturnType<typeof articleApi.fetchArticlesByArchive>>);
+    mockFetchArticlesByArchive.mockResolvedValue({} as Awaited<ReturnType<typeof fetchArticlesByArchive>>);
 
     const { result } = renderHook(() => useArchiveArticles(2024, 6));
 
@@ -84,7 +90,7 @@ describe('useArchiveArticles', () => {
     });
 
     vi.clearAllMocks();
-    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, page: 2 } as ReturnType<typeof articleMapper.mapArticlesPageDTO>);
+    mockMapArticlesPageDTO.mockReturnValue({ ...fakeMappedResult, page: 2 } as ReturnType<typeof mapArticlesPageDTO>);
 
     await act(async () => {
       await result.current.loadPage(2);
@@ -104,7 +110,7 @@ describe('useArchiveArticles', () => {
 
     mockFetchArticlesByArchive
       .mockImplementationOnce(() => firstPromise)
-      .mockResolvedValueOnce({} as Awaited<ReturnType<typeof articleApi.fetchArticlesByArchive>>);
+      .mockResolvedValueOnce({} as Awaited<ReturnType<typeof fetchArticlesByArchive>>);
 
     const { result, rerender } = renderHook(
       ({ year, month }) => useArchiveArticles(year, month),
