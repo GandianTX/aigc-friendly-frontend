@@ -1,10 +1,13 @@
 // src/features/article-detail/ui/article-detail.tsx
 
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Empty, Spin, Tag, Typography } from 'antd';
+import { Button, Divider, Empty, Spin, Tag, Typography } from 'antd';
 import { useNavigate } from 'react-router';
 
-import { type Article,formatPublishedDate } from '@/entities/article';
+import { type Article, formatPublishedDate } from '@/entities/article';
+import { LikeButton } from '@/features/article-like';
+import { CommentList, CommentForm } from '@/features/comment';
+import { useComments } from '@/features/comment';
 
 import { useArticleDetail } from '../application/use-article-detail';
 
@@ -42,6 +45,7 @@ function PrevNextNav({
 
 export function ArticleDetail({ articleId }: { articleId: string | undefined }) {
   const { article, prevArticle, nextArticle, loading, error } = useArticleDetail(articleId);
+  const { comments, loading: commentsLoading, reload: reloadComments } = useComments(articleId);
 
   if (loading) {
     return (
@@ -78,7 +82,25 @@ export function ArticleDetail({ articleId }: { articleId: string | undefined }) 
         <Paragraph>{article.content}</Paragraph>
       </div>
 
+      <div className="mt-4">
+        <LikeButton articleId={articleId} />
+      </div>
+
       <PrevNextNav prev={prevArticle} next={nextArticle} />
+
+      <Divider />
+
+      <section>
+        <CommentList
+          comments={comments}
+          loading={commentsLoading}
+          articleId={articleId}
+          onReplySuccess={reloadComments}
+        />
+        <div className="mt-6">
+          <CommentForm articleId={articleId} onSuccess={reloadComments} />
+        </div>
+      </section>
     </article>
   );
 }
