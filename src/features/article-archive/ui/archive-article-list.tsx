@@ -2,8 +2,9 @@
 
 import { Empty, List, Pagination, Spin } from 'antd';
 
+import { ArticleCard } from '@/entities/article';
+
 import { useArchiveArticles } from '../application/use-archive-articles';
-import { ArticleCard } from '@/widgets/article-card';
 
 interface ArchiveArticleListProps {
   year: number;

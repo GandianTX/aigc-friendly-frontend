@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => {
   const devServerHost = env.DEV_SERVER_HOST || 'localhost';
   const devServerPort = parseInteger(env.DEV_SERVER_PORT, 5173);
   const devServerStrictPort = parseBoolean(env.DEV_SERVER_STRICT_PORT, false);
+  const devServerProxyTarget = env.DEV_SERVER_PROXY_TARGET || 'http://127.0.0.1:3000';
   const buildOutDir = env.BUILD_OUT_DIR || 'dist';
   const buildSourcemap = parseBoolean(env.BUILD_SOURCEMAP, false);
   const buildChunkWarningLimit = parseInteger(
@@ -70,6 +71,18 @@ export default defineConfig(({ mode }) => {
       host: devServerHost,
       port: devServerPort,
       strictPort: devServerStrictPort,
+      allowedHosts: ['aigc.gandiantx.fun'],
+      proxy: {
+        '/graphql': {
+          target: devServerProxyTarget,
+          changeOrigin: true,
+          ws: true,
+        },
+        '/health': {
+          target: devServerProxyTarget,
+          changeOrigin: true,
+        },
+      },
     },
     build: {
       outDir: buildOutDir,

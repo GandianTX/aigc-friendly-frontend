@@ -1,6 +1,6 @@
 // src/features/article-detail/infrastructure/article-api.spec.ts
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
 import type { ArticleDTO, PrevNextArticleDTO } from './dto';
 

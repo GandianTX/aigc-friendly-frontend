@@ -9,6 +9,7 @@ import {
 } from 'react-router';
 
 import { AppLayout } from '@/app/layout';
+import { AdminLayout } from '@/widgets/admin-layout';
 
 import { BlogArticlePage } from '@/pages/blog-article';
 import { BlogArchivePage } from '@/pages/blog-archive';
@@ -17,7 +18,19 @@ import { BlogSearchPage } from '@/pages/blog-search';
 import { ErrorPreviewPage } from '@/pages/error-preview';
 import { HomePage } from '@/pages/home';
 import { ProjectStructurePage } from '@/pages/project-structure';
+
+import { AdminLoginPage } from '@/pages/admin-login';
+import { AdminDashboardPage } from '@/pages/admin-dashboard';
+import { AdminArticlesPage } from '@/pages/admin-articles';
+import { AdminCommentsPage } from '@/pages/admin-comments';
+import { AdminCategoriesPage } from '@/pages/admin-categories';
+import { AdminTagsPage } from '@/pages/admin-tags';
+import { AdminUploadsPage } from '@/pages/admin-uploads';
+import { AdminSettingsPage } from '@/pages/admin-settings';
+import { AdminLinksPage } from '@/pages/admin-links';
+
 import { Error403, Error404, Error500, ErrorRouteCrash } from '@/features/error-feedback';
+import { isAuthenticated } from '@/features/admin-auth';
 
 import { getAppEnv } from '@/shared/env';
 
@@ -63,6 +76,14 @@ function game2048LabLoader() {
 function sandboxPlaygroundLoader() {
   if (!canAccessSandboxPlayground(getAppEnv())) {
     throw redirect('/');
+  }
+
+  return null;
+}
+
+function adminGuardLoader() {
+  if (!isAuthenticated()) {
+    throw redirect('/admin/login');
   }
 
   return null;
@@ -121,6 +142,25 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     errorElement: <RouteErrorBoundary />,
     path: '/',
+  },
+  {
+    path: '/admin/login',
+    element: <AdminLoginPage />,
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    loader: adminGuardLoader,
+    children: [
+      { index: true, element: <AdminDashboardPage /> },
+      { path: 'articles', element: <AdminArticlesPage /> },
+      { path: 'comments', element: <AdminCommentsPage /> },
+      { path: 'categories', element: <AdminCategoriesPage /> },
+      { path: 'tags', element: <AdminTagsPage /> },
+      { path: 'uploads', element: <AdminUploadsPage /> },
+      { path: 'settings', element: <AdminSettingsPage /> },
+      { path: 'links', element: <AdminLinksPage /> },
+    ],
   },
 ]);
 

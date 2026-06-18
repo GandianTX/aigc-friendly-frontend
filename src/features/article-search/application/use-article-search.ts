@@ -3,14 +3,16 @@
 import { useCallback, useReducer, useRef } from 'react';
 
 import { type ArticleListItem } from '@/entities/article';
+
+import {
+  createInitialPaginatedListState,
+  createPaginatedListReducer,
+  type PaginatedListAction,
+  type PaginatedListState,
+} from '@/shared/hooks';
+
 import { searchArticles } from '../infrastructure/article-search-api';
 import { mapArticlesPageDTO } from '../infrastructure/mapper';
-import {
-  type PaginatedListState,
-  type PaginatedListAction,
-  createPaginatedListReducer,
-  createInitialPaginatedListState,
-} from '@/shared/hooks';
 
 type ArticleSearchState = PaginatedListState<ArticleListItem> & { keyword: string };
 type ArticleSearchAction =

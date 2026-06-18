@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { type Article } from '@/entities/article';
+
 import { fetchArticleById, fetchPrevNextArticle, incrementViewCount } from '../infrastructure/article-api';
 import { mapArticleDTOToArticle, mapPrevNextArticleDTO } from '../infrastructure/mapper';
 

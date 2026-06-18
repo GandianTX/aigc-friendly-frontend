@@ -3,12 +3,14 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { type ArticleListItem } from '@/entities/article';
+
+import {
+  createInitialPaginatedListState,
+  createPaginatedListReducer,
+} from '@/shared/hooks';
+
 import { fetchArticlesByArchive } from '../infrastructure/article-archive-api';
 import { mapArticlesPageDTO } from '../infrastructure/mapper';
-import {
-  createPaginatedListReducer,
-  createInitialPaginatedListState,
-} from '@/shared/hooks';
 
 const archiveArticlesReducer = createPaginatedListReducer<ArticleListItem>();
 const initialState = createInitialPaginatedListState<ArticleListItem>();

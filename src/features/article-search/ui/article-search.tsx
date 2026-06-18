@@ -1,11 +1,12 @@
 // src/features/article-search/ui/article-search.tsx
 
 import { useState } from 'react';
-import { Empty, Input, List, Pagination, Spin } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import { Empty, Input, List, Pagination, Spin } from 'antd';
+
+import { ArticleCard } from '@/entities/article';
 
 import { useArticleSearch } from '../application/use-article-search';
-import { ArticleCard } from '@/widgets/article-card';
 
 export function ArticleSearch() {
   const { items, total, page, pageSize, loading, error, keyword, search, loadPage } = useArticleSearch();

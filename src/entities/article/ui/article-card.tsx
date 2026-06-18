@@ -1,9 +1,10 @@
-// src/widgets/article-card/index.tsx
+// src/entities/article/ui/article-card.tsx
 
 import { Card, Tag } from 'antd';
 import { useNavigate } from 'react-router';
 
-import { type ArticleListItem, formatPublishedDate } from '@/entities/article';
+import { type ArticleListItem } from '../domain/article';
+import { formatPublishedDate } from '../domain/article-policy';
 
 interface ArticleCardProps {
   article: ArticleListItem;

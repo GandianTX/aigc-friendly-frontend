@@ -1,10 +1,11 @@
 // src/features/article-list/application/use-article-list.spec.ts
 
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
-import { mapArticlesPageDTO } from '../infrastructure/mapper';
 import { fetchPublishedArticles } from '../infrastructure/article-api';
+import { mapArticlesPageDTO } from '../infrastructure/mapper';
+
 import { useArticleList } from './use-article-list';
 
 vi.mock('../infrastructure/article-api');

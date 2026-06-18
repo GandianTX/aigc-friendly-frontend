@@ -2,7 +2,7 @@
 
 import { executeGraphQL } from '@/shared/graphql';
 
-import type { ArticlesPageDTO, ArchiveDTO } from './dto';
+import type { ArchiveDTO,ArticlesPageDTO } from './dto';
 
 export type { ArchiveDTO } from './dto';
 

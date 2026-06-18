@@ -1,11 +1,11 @@
 // src/features/article-search/application/use-article-search.spec.ts
 
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-
-import { mapArticlesPageDTO } from '../infrastructure/mapper';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
 import { searchArticles } from '../infrastructure/article-search-api';
+import { mapArticlesPageDTO } from '../infrastructure/mapper';
+
 import { useArticleSearch } from './use-article-search';
 
 // Mock feature-local API 和 mapper

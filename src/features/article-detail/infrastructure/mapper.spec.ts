@@ -1,6 +1,6 @@
 // src/features/article-detail/infrastructure/mapper.spec.ts
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
 
 import type { ArticleDTO, PrevNextArticleDTO } from './dto';
 import { mapArticleDTOToArticle, mapPrevNextArticleDTO } from './mapper';

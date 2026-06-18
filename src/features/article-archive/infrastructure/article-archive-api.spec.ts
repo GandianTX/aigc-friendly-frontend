@@ -1,8 +1,8 @@
 // src/features/article-archive/infrastructure/article-archive-api.spec.ts
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
-import type { ArticlesPageDTO, ArchiveDTO } from './dto';
+import type { ArchiveDTO,ArticlesPageDTO } from './dto';
 
 // Mock executeGraphQL before importing the module under test
 const mockExecuteGraphQL = vi.fn();

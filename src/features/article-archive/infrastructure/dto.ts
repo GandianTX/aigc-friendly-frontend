@@ -1,33 +1,9 @@
 // src/features/article-archive/infrastructure/dto.ts
 
+export type { ArticleDTO, ArticlesPageDTO } from '@/entities/article';
+
 export interface ArchiveDTO {
   readonly year: number;
   readonly month: number;
   readonly count: number;
-}
-
-export interface ArticleDTO {
-  readonly id: string;
-  readonly title: string;
-  readonly content: string;
-  readonly summary: string | null;
-  readonly coverImageUrl: string | null;
-  readonly status: 'DRAFT' | 'PUBLISHED';
-  readonly isTop: boolean;
-  readonly publishedAt: string | null;
-  readonly viewCount: number;
-  readonly likeCount: number;
-  readonly commentCount: number;
-  readonly categoryId: string | null;
-  readonly categoryName: string | null;
-  readonly tags: ReadonlyArray<{ id: string; name: string; slug: string }>;
-  readonly createdAt: string;
-  readonly updatedAt: string;
-}
-
-export interface ArticlesPageDTO {
-  readonly items: ArticleDTO[];
-  readonly total: number;
-  readonly page: number;
-  readonly pageSize: number;
 }

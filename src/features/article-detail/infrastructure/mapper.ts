@@ -1,8 +1,8 @@
 // src/features/article-detail/infrastructure/mapper.ts
 
-import type { Article } from '@/entities/article';
+import type { Article, ArticleDTO } from '@/entities/article';
 
-import type { ArticleDTO, PrevNextArticleDTO } from './dto';
+import type { PrevNextArticleDTO } from './dto';
 
 export function mapArticleDTOToArticle(dto: ArticleDTO): Article {
   return {

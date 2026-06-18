@@ -3,14 +3,16 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { type ArticleListItem } from '@/entities/article';
+
+import {
+  createInitialPaginatedListState,
+  createPaginatedListReducer,
+  type PaginatedListAction,
+  type PaginatedListState,
+} from '@/shared/hooks';
+
 import { fetchPublishedArticles } from '../infrastructure/article-api';
 import { mapArticlesPageDTO } from '../infrastructure/mapper';
-import {
-  type PaginatedListState,
-  type PaginatedListAction,
-  createPaginatedListReducer,
-  createInitialPaginatedListState,
-} from '@/shared/hooks';
 
 type ArticleListState = PaginatedListState<ArticleListItem>;
 type ArticleListAction = PaginatedListAction<ArticleListItem> | { type: 'SET_PAGE'; page: number };

@@ -1,10 +1,11 @@
 // src/features/article-detail/application/use-article-detail.spec.ts
 
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
-import { mapArticleDTOToArticle, mapPrevNextArticleDTO } from '../infrastructure/mapper';
 import { fetchArticleById, fetchPrevNextArticle, incrementViewCount } from '../infrastructure/article-api';
+import { mapArticleDTOToArticle, mapPrevNextArticleDTO } from '../infrastructure/mapper';
+
 import { useArticleDetail } from './use-article-detail';
 
 vi.mock('../infrastructure/article-api');

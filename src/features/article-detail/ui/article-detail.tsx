@@ -2,12 +2,10 @@
 
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Divider, Empty, Spin, Tag, Typography } from 'antd';
+import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 
 import { type Article, formatPublishedDate } from '@/entities/article';
-import { LikeButton } from '@/features/article-like';
-import { CommentList, CommentForm } from '@/features/comment';
-import { useComments } from '@/features/comment';
 
 import { useArticleDetail } from '../application/use-article-detail';
 
@@ -43,9 +41,14 @@ function PrevNextNav({
   );
 }
 
-export function ArticleDetail({ articleId }: { articleId: string | undefined }) {
+interface ArticleDetailProps {
+  articleId: string | undefined;
+  likeSlot?: ReactNode;
+  commentSlot?: ReactNode;
+}
+
+export function ArticleDetail({ articleId, likeSlot, commentSlot }: ArticleDetailProps) {
   const { article, prevArticle, nextArticle, loading, error } = useArticleDetail(articleId);
-  const { comments, loading: commentsLoading, reload: reloadComments } = useComments(articleId);
 
   if (loading) {
     return (
@@ -82,25 +85,16 @@ export function ArticleDetail({ articleId }: { articleId: string | undefined }) 
         <Paragraph>{article.content}</Paragraph>
       </div>
 
-      <div className="mt-4">
-        <LikeButton articleId={articleId} />
-      </div>
+      {likeSlot ? <div className="mt-4">{likeSlot}</div> : null}
 
       <PrevNextNav prev={prevArticle} next={nextArticle} />
 
-      <Divider />
-
-      <section>
-        <CommentList
-          comments={comments}
-          loading={commentsLoading}
-          articleId={articleId}
-          onReplySuccess={reloadComments}
-        />
-        <div className="mt-6">
-          <CommentForm articleId={articleId} onSuccess={reloadComments} />
-        </div>
-      </section>
+      {commentSlot ? (
+        <>
+          <Divider />
+          <section>{commentSlot}</section>
+        </>
+      ) : null}
     </article>
   );
 }

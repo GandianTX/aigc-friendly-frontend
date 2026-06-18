@@ -2,8 +2,9 @@
 
 import { Empty, List, Pagination, Spin } from 'antd';
 
+import { ArticleCard } from '@/entities/article';
+
 import { useArticleList } from '../application/use-article-list';
-import { ArticleCard } from '@/widgets/article-card';
 
 interface ArticleListProps {
   categoryId?: string | null;
